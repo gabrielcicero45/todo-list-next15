@@ -1,6 +1,7 @@
+import { getCategory } from "@/actions/categoryActions";
 import { updateTask } from "@/actions/taskActions";
 import { Task } from "@/app/types/task";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function TaskItem({
   initialTask,
@@ -10,6 +11,16 @@ export default function TaskItem({
   onDelete: (task: Task) => void;
 }) {
   const [task, setTask] = useState(initialTask);
+  const [categoryName, setCategoryName] = useState<string>("Loading...");
+  
+  useEffect(() => {
+    if (task.categoryId) {
+      getCategory(task.categoryId).then((name) => setCategoryName(name));
+    } else {
+      setCategoryName("Uncategorized");
+    }
+  }, [task.categoryId]);
+
   async function toggleComplete() {
     const updatedTask = { ...task, completed: !task.completed };
 
@@ -27,7 +38,7 @@ export default function TaskItem({
     <div className="p-4 border rounded shadow">
       <h2 className="text-xl font-semibold">{task.title}</h2>
       <p>
-        <strong>Category:</strong> {task.categoryId || "None"}
+        <strong>Category:</strong> {categoryName}
       </p>
       <p>{task.description}</p>
       <div className="flex gap-2 mt-2">

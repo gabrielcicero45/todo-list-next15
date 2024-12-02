@@ -1,7 +1,7 @@
 import { getCategories } from "@/actions/categoryActions";
 import { useEffect, useState } from "react";
 
-export default function TaskForm({ onAdd }: { onAdd: (title: string, description: string, categoryId?:number) => void; }) {
+export default function TaskForm({ onAdd }: { onAdd: (title: string, description: string, categoryId:number | null) => void; }) {
   const [categories, setCategories] = useState<{id:number, name: string}[]>();
   
   async function handleCreate(formData: FormData) {
@@ -10,7 +10,7 @@ export default function TaskForm({ onAdd }: { onAdd: (title: string, description
     const description = formData.get("description") as string;
     const categoryId = formData.get("category") as string;
 
-    const parsedCategoryId = categoryId ? parseInt(categoryId, 10) : undefined;
+    const parsedCategoryId = categoryId ? parseInt(categoryId, 10) : null;
 
     if (!title || !description) {
       throw new Error("Both title and description are required!");

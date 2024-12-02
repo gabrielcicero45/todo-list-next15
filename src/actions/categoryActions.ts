@@ -7,6 +7,14 @@ export async function createCategory(name: string) {
   });
 }
 
+export async function getCategory(categoryId: number) {
+    const category = await prisma.category.findUnique({
+      where: { id: categoryId },
+      select: { name: true }, 
+    });
+    return category?.name || "None";
+}
+
 export async function getCategories() {
   return prisma.category.findMany();
 }

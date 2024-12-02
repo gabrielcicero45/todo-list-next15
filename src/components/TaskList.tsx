@@ -8,7 +8,7 @@ import { createTask, deleteTask } from "@/actions/taskActions";
 export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
   const [tasks, setTasks] = useState(initialTasks);
 
-  async function handleCreate(title: string, description: string, categoryId?: number) {
+  async function handleCreate(title: string, description: string, categoryId: number | null) {
     const optimisticTask: Task = {
       id: -(tasks.length + 1),
       title,
@@ -25,10 +25,10 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
 
       setTasks((prev) =>
         prev.map((task) => {
-          if (task.id === optimisticTask.id) {
+          if (task.id === createdTask.id) {
             return {
               ...task,
-              categoryId: optimisticTask.categoryId ?? undefined,
+              categoryId: optimisticTask.categoryId ?? null,
             };
           }
           return task;
