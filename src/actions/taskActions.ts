@@ -1,14 +1,14 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 
-export async function createTask(data: { title: string; description: string }) {
+export async function createTask(data: { title: string; description: string, categoryId?: number; }) {
   return await prisma.task.create({
     data: {
       title: data.title,
       description: data.description,
+      categoryId: data.categoryId
     },
   });
-  
 }
 
 export async function getTasks() {

@@ -2,25 +2,33 @@ import { updateTask } from "@/actions/taskActions";
 import { Task } from "@/app/types/task";
 import { useState } from "react";
 
-
-export default function TaskItem({ initialTask, onDelete }: { initialTask: Task, onDelete: (task: Task) => void  }) {
+export default function TaskItem({
+  initialTask,
+  onDelete,
+}: {
+  initialTask: Task;
+  onDelete: (task: Task) => void;
+}) {
   const [task, setTask] = useState(initialTask);
   async function toggleComplete() {
     const updatedTask = { ...task, completed: !task.completed };
 
-    setTask((prev)=> prev.id === updatedTask.id ? updatedTask : prev)
-    try{
+    setTask((prev) => (prev.id === updatedTask.id ? updatedTask : prev));
+    try {
       await updateTask(task.id, { completed: !task.completed });
-    }catch (error) {
-      console.error('Failed to update task:', error);
+    } catch (error) {
+      console.error("Failed to update task:", error);
 
-      setTask((prev)=> prev.id === updatedTask.id ? updatedTask : prev)
+      setTask((prev) => (prev.id === updatedTask.id ? updatedTask : prev));
     }
   }
 
   return (
     <div className="p-4 border rounded shadow">
       <h2 className="text-xl font-semibold">{task.title}</h2>
+      <p>
+        <strong>Category:</strong> {task.categoryId || "None"}
+      </p>
       <p>{task.description}</p>
       <div className="flex gap-2 mt-2">
         <form action={toggleComplete}>
@@ -33,7 +41,7 @@ export default function TaskItem({ initialTask, onDelete }: { initialTask: Task,
             {task.completed ? "Completed" : "Mark Complete"}
           </button>
         </form>
-        <form action={()=> onDelete(task)}>
+        <form action={() => onDelete(task)}>
           <button
             type="submit"
             className="px-4 py-2 bg-red-500 text-white rounded"

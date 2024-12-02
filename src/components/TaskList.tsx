@@ -8,11 +8,12 @@ import { createTask, deleteTask } from "@/actions/taskActions";
 export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
   const [tasks, setTasks] = useState(initialTasks);
 
-  async function handleCreate(title: string, description: string) {
+  async function handleCreate(title: string, description: string, categoryId?: number) {
     const optimisticTask: Task = {
       id: -(tasks.length + 1),
       title,
       description,
+      categoryId,
       completed: false,
       createdAt: new Date(),
     };
@@ -20,10 +21,18 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
     setTasks((prev) => [optimisticTask, ...prev]);
 
     try {
-      const createdTask = await createTask({ title, description });
+      const createdTask = await createTask({ title, description, categoryId });
 
       setTasks((prev) =>
-        prev.map((task) => (task.id === optimisticTask.id ? createdTask : task))
+        prev.map((task) => {
+          if (task.id === optimisticTask.id) {
+            return {
+              ...task,
+              categoryId: optimisticTask.categoryId ?? undefined,
+            };
+          }
+          return task;
+        })
       );
     } catch (error) {
       console.error("Failed to create task:", error);
@@ -47,8 +56,8 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
   return (
     <div className="grid gap-4">
       <TaskForm
-        onAdd={(title, description) => {
-          handleCreate(title, description);
+        onAdd={(title, description, categoryId) => {
+          handleCreate(title, description, categoryId);
         }}
       />
       {tasks.map((task) => (

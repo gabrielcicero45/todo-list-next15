@@ -11,6 +11,15 @@ model Task {
   id          Int      @id @default(autoincrement())
   title       String
   description String
+  categoryId  Int?
   completed   Boolean  @default(false)
   createdAt   DateTime @default(now())
+
+  Category Category? @relation(fields: [categoryId], references: [id])
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  tasks Task[]
 }
