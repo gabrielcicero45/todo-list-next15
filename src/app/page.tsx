@@ -6,12 +6,12 @@ export default async function HomePage() {
   const tasks = await getTasks();
 
   return (
-      <main className="container mx-auto p-4 bg-white dark:bg-gray-900 text-black dark:text-white">
-        <nav className="flex justify-between">
-          <h1 className="text-2xl font-bold mb-4">Todo List</h1>
-          <ToggleThemeButton />
-        </nav>
-        <TaskList initialTasks={tasks} />
-      </main> 
+    <main className="container mx-auto p-4 bg-gray-200 dark:bg-gray-900 text-black dark:text-white h-screen">
+      <nav className="flex justify-between">
+        <h1 className="text-2xl font-bold mb-4">Todo List</h1>
+        <ToggleThemeButton />
+      </nav>
+      <TaskList initialTasks={tasks} />
+    </main>
   );
 }

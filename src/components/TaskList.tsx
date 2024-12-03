@@ -6,10 +6,12 @@ import TaskItem from "./TaskItem";
 import { Task } from "@/app/types/task";
 import { createTask, deleteTask } from "@/actions/taskActions";
 import { createSwapy } from "swapy";
+import Modal from "./Modal";
 
 export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
   const [tasks, setTasks] = useState(initialTasks);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const filteredTasks =
     searchQuery.length >= 2
@@ -68,27 +70,35 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
   }
 
   useEffect(() => {
-    const container = document.querySelector('.list')!
+    const container = document.querySelector(".list")!;
     const swapy = createSwapy(container, {
-      swapMode: 'hover'
-    })
+      swapMode: "hover",
+    });
 
     swapy.onSwap(({ data }) => {
-      localStorage.setItem('slotItem', JSON.stringify(data.object))
-    })
+      localStorage.setItem("slotItem", JSON.stringify(data.object));
+    });
 
     return () => {
-      swapy.destroy()
-    }
-  }, [])
+      swapy.destroy();
+    };
+  }, []);
 
   return (
     <>
-      <TaskForm
-        onAdd={(title, description, categoryId) => {
-          handleCreate(title, description, categoryId);
-        }}
-      />
+      <Modal show={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <TaskForm
+          onAdd={(title, description, categoryId) => {
+            handleCreate(title, description, categoryId);
+          }}
+        />
+      </Modal>
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="bg-blue-500 dark:bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-600"
+      >
+        Create task
+      </button>
       <div className="my-5">
         <input
           type="text"

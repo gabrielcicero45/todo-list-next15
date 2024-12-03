@@ -60,7 +60,9 @@ export default function TaskItem({
               <button
                 type="submit"
                 className={`px-4 py-2 rounded ${
-                  task.completed ? "bg-green-500" : "bg-gray-300"
+                  task.completed
+                    ? "bg-green-500 dark:bg-green-600 "
+                    : "bg-gray-300 dark:bg-gray-500"
                 }`}
                 disabled={task.completed}
               >
