@@ -12,7 +12,7 @@ export async function createTask(data: { title: string; description: string, cat
 }
 
 export async function getTasks() {
-  return prisma.task.findMany({ orderBy: { createdAt: "desc" } });
+  return prisma.task.findMany({ orderBy: { categoryId: "desc" } });
 }
 
 export async function updateTask(id: number, updates: { completed: boolean }) {

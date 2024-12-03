@@ -7,8 +7,20 @@ import { createTask, deleteTask } from "@/actions/taskActions";
 
 export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
   const [tasks, setTasks] = useState(initialTasks);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  async function handleCreate(title: string, description: string, categoryId: number | null) {
+  const filteredTasks =
+    searchQuery.length >= 2
+      ? tasks.filter((task) =>
+          task.title.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : tasks;
+
+  async function handleCreate(
+    title: string,
+    description: string,
+    categoryId: number | null
+  ) {
     const optimisticTask: Task = {
       id: -(tasks.length + 1),
       title,
@@ -54,19 +66,34 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
   }
 
   return (
-    <div className="grid gap-4">
+    <>
       <TaskForm
         onAdd={(title, description, categoryId) => {
           handleCreate(title, description, categoryId);
         }}
       />
-      {tasks.map((task) => (
-        <TaskItem
-          key={task.id}
-          initialTask={task}
-          onDelete={deleteTaskOptimistically}
+      <div className="my-5">
+        <input
+          type="text"
+          placeholder="Search tasks..."
+          className="w-full p-2 border rounded shadow"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
-      ))}
-    </div>
+      </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-5">
+        {filteredTasks.length > 0 ? (
+          filteredTasks.map((task) => (
+            <TaskItem
+              key={task.id}
+              initialTask={task}
+              onDelete={deleteTaskOptimistically}
+            />
+          ))
+        ) : (
+          <p>No tasks found</p>
+        )}
+      </div>
+    </>
   );
 }

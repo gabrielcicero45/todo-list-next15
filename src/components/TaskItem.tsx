@@ -35,12 +35,12 @@ export default function TaskItem({
   }
 
   return (
-    <div className="p-4 border rounded shadow">
-      <h2 className="text-xl font-semibold">{task.title}</h2>
-      <p>
-        <strong>Category:</strong> {categoryName}
+    <div className="bg-gray-100 p-4 border rounded shadow" data-swapy-item={task.title}>
+      <p className="font-bold">
+        Category: {categoryName}
       </p>
-      <p>{task.description}</p>
+      <h2 className={`text-xl font-semibold ${task.completed ? "line-through text-gray-500":""}`}>{task.title}</h2>
+      <p className={`${task.completed ? "line-through text-gray-500":""}`}>{task.description}</p>
       <div className="flex gap-2 mt-2">
         <form action={toggleComplete}>
           <button
@@ -48,6 +48,7 @@ export default function TaskItem({
             className={`px-4 py-2 rounded ${
               task.completed ? "bg-green-500" : "bg-gray-300"
             }`}
+            disabled={task.completed}
           >
             {task.completed ? "Completed" : "Mark Complete"}
           </button>
