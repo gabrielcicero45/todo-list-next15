@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TaskForm from "./TaskForm";
 import TaskItem from "./TaskItem";
 import { Task } from "@/app/types/task";
 import { createTask, deleteTask } from "@/actions/taskActions";
+import { createSwapy } from "swapy";
 
 export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
   const [tasks, setTasks] = useState(initialTasks);
@@ -65,6 +66,21 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
     }
   }
 
+  useEffect(() => {
+    const container = document.querySelector('.list')!
+    const swapy = createSwapy(container, {
+      swapMode: 'hover'
+    })
+
+    swapy.onSwap(({ data }) => {
+      localStorage.setItem('slotItem', JSON.stringify(data.object))
+    })
+
+    return () => {
+      swapy.destroy()
+    }
+  }, [])
+
   return (
     <>
       <TaskForm
@@ -81,7 +97,7 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-5">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-5 list">
         {filteredTasks.length > 0 ? (
           filteredTasks.map((task) => (
             <TaskItem
