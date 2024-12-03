@@ -1,3 +1,4 @@
+"use client";
 import { getCategory } from "@/actions/categoryActions";
 import { updateTask } from "@/actions/taskActions";
 import { Task } from "@/app/types/task";
@@ -37,7 +38,7 @@ export default function TaskItem({
   return (
     <div data-swapy-slot={task.id}>
       <div
-        className="bg-gray-100 p-4 border rounded shadow"
+        className="bg-gray-100 dark:bg-gray-600 p-4 border rounded shadow"
         data-swapy-item={task.title}
       >
         <div data-swapy-handle>
