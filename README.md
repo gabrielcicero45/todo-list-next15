@@ -15,7 +15,9 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result:
+![image](https://github.com/user-attachments/assets/21166316-6cd5-43e4-ba01-ad141108cbff)
+
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
@@ -34,6 +36,7 @@ You can add task categories by visiting the following page in your application:
 ```bash
     http://localhost:3000/categories/new
 ```
+![image](https://github.com/user-attachments/assets/8281b513-408e-4624-81cb-4684de2f7964)
 
 ## Deploy on Vercel
 

@@ -71,9 +71,7 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
 
   useEffect(() => {
     const container = document.querySelector(".list")!;
-    const swapy = createSwapy(container, {
-      swapMode: "hover",
-    });
+    const swapy = createSwapy(container);
 
     swapy.onSwap(({ data }) => {
       localStorage.setItem("slotItem", JSON.stringify(data.object));
@@ -118,7 +116,9 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
             />
           ))
         ) : (
-          <p>No tasks found</p>
+          <div data-swapy-slot="1">
+            <p>No tasks found</p>
+          </div>
         )}
       </div>
     </>
