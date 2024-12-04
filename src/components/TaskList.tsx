@@ -4,14 +4,30 @@ import { useEffect, useState } from "react";
 import TaskForm from "./TaskForm";
 import TaskItem from "./TaskItem";
 import { Task } from "@/app/types/task";
-import { createTask, deleteTask } from "@/actions/taskActions";
+import { createTask, deleteTask, getTasks } from "@/actions/taskActions";
 import { createSwapy } from "swapy";
 import Modal from "./Modal";
+import { useRouter } from "next/navigation";
 
 export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
   const [tasks, setTasks] = useState(initialTasks);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (!initialTasks || initialTasks.length === 0) {
+      async function fetchTasks() {
+        try {
+          const fetchedTasks = await getTasks();
+          setTasks(fetchedTasks);
+        } catch (error) {
+          console.error("Failed to fetch tasks:", error);
+        }
+      }
+
+      fetchTasks();
+    }
+  }, [initialTasks]);
 
   const filteredTasks =
     searchQuery.length >= 2
@@ -71,7 +87,7 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
 
   useEffect(() => {
     const container = document.querySelector(".list");
-    
+
     if (container) {
       const swapy = createSwapy(container);
 
@@ -85,7 +101,8 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
     }
     return;
   }, []);
-
+  const router = useRouter();
+  
   return (
     <>
       <Modal show={isModalOpen} onClose={() => setIsModalOpen(false)}>
@@ -101,6 +118,10 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
       >
         Create task
       </button>
+      <button onClick={() => router.push('/categories/new')} className="bg-blue-500 text-white p-2 rounded">
+        New Category
+      </button>
+
       <div className="my-5">
         <input
           type="text"
