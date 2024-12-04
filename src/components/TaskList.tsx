@@ -70,16 +70,20 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
   }
 
   useEffect(() => {
-    const container = document.querySelector(".list")!;
-    const swapy = createSwapy(container);
+    const container = document.querySelector(".list");
+    
+    if (container) {
+      const swapy = createSwapy(container);
 
-    swapy.onSwap(({ data }) => {
-      localStorage.setItem("slotItem", JSON.stringify(data.object));
-    });
+      swapy.onSwap(({ data }) => {
+        localStorage.setItem("slotItem", JSON.stringify(data.object));
+      });
 
-    return () => {
-      swapy.destroy();
-    };
+      return () => {
+        swapy.destroy();
+      };
+    }
+    return;
   }, []);
 
   return (
@@ -106,21 +110,20 @@ export default function TaskList({ initialTasks }: { initialTasks: Task[] }) {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-5 list">
-        {filteredTasks.length > 0 ? (
-          filteredTasks.map((task) => (
+
+      {filteredTasks.length > 0 ? (
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-5 list">
+          {filteredTasks.map((task) => (
             <TaskItem
               key={task.id}
               initialTask={task}
               onDelete={deleteTaskOptimistically}
             />
-          ))
-        ) : (
-          <div data-swapy-slot="1">
-            <p>No tasks found</p>
-          </div>
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <p>No tasks found</p>
+      )}
     </>
   );
 }
